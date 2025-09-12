@@ -1,0 +1,42 @@
+name: Aggiornamento Dati Giornaliero Terna
+
+on:
+  # Esegue l'azione ogni giorno alle 5:00 UTC (le 7:00 in Italia con l'ora legale)
+  schedule:
+    - cron: '0 5 * * *'
+  # Permette di avviare l'azione manualmente dalla pagina "Actions" di GitHub
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del repository
+        uses: actions/checkout@v4
+
+      - name: Setup di Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Installazione delle dipendenze
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests pandas
+
+      - name: Creazione del file config.py dai secrets
+        run: |
+          echo "CLIENT_ID = '${{ secrets.TERNA_CLIENT_ID }}'" >> config.py
+          echo "CLIENT_SECRET = '${{ secrets.TERNA_CLIENT_SECRET }}'" >> config.py
+        
+      - name: Esecuzione dello script per scaricare i dati
+        run: python3 data_fetcher.py
+      
+      - name: Commit e Push del file dati aggiornato
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "📊 Aggiornamento automatico dati carico elettrico"
+          file_pattern: 'dati/carico_elettrico.json'
+          commit_user_name: "GitHub Actions Bot"
+          commit_user_email: "actions@github.com"
+          commit_author: "GitHub Actions Bot <actions@github.com>"
