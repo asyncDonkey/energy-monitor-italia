@@ -10,6 +10,10 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: write  # Permesso necessario per fare commit sul repository
+      
     steps:
       - name: Checkout del repository
         uses: actions/checkout@v4
