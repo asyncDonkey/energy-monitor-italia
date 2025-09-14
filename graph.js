@@ -10,7 +10,7 @@ function calculateAndDisplayKPIs(selectedZone) {
     const peakZoneNameEl = document.getElementById('peakZoneName');
     if (peakZoneNameEl.textContent === '--') {
         const consumptionByZone = allData.reduce((acc, curr) => {
-            // Escludiamo "Italy" dal calcolo della zona con maggior consumo
+            
             if (curr.bidding_zone !== 'Italy') {
                 acc[curr.bidding_zone] = (acc[curr.bidding_zone] || 0) + curr.total_load_MW;
             }
@@ -29,7 +29,7 @@ function calculateAndDisplayKPIs(selectedZone) {
         document.getElementById('peakZoneValue').textContent = `${Math.round(maxConsumption).toLocaleString('en-US')} MW (Total)`;
     }
 
-    // --- 2. Peak Time for the SELECTED Zone ---
+    // 2. Peak Time for the SELECTED Zone
     const zoneData = allData.filter(d => d.bidding_zone === selectedZone);
     if (zoneData.length > 0) {
         const peakRecordForZone = zoneData.reduce((max, current) => 
@@ -39,7 +39,7 @@ function calculateAndDisplayKPIs(selectedZone) {
         document.getElementById('selectedZonePeakTime').textContent = peakTime;
     }
 
-    // --- 3. Peak Time for "Italy" ---
+    // 3. Peak Time for "Italy"
     const italyPeakTimeEl = document.getElementById('italyPeakTime');
     if (italyPeakTimeEl.textContent === '--') {
         const italyData = allData.filter(d => d.bidding_zone === 'Italy');
@@ -65,7 +65,7 @@ function updateChart(selectedZone) {
     // Se il grafico non è ancora stato creato
     if (!chartInstance) {
         const ctx = document.getElementById('loadChart').getContext('2d');
-        // --- CONFIGURAZIONE COMPLETA RIPRISTINATA QUI ---
+        
         chartInstance = new Chart(ctx, {
             type: 'line',
             data: {
@@ -137,7 +137,7 @@ async function init() {
 
     } catch (error) {
         console.error("Could not load or process data:", error);
-        // Potresti mostrare un messaggio di errore all'utente nella pagina
+        alert("Failed to load data. Please try again later.");
     }
 }
 

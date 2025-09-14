@@ -24,7 +24,7 @@ def get_access_token(client_id, client_secret):
 def get_total_load(access_token):
     """Ottiene i dati del carico totale usando il token."""
     data_url = "https://api.terna.it/load/v2.0/total-load"
-    # Prendiamo i dati di ieri, una data sicura per avere dati consolidati
+    # Dati di ieri una data sicura per avere dati consolidati
     from datetime import date, timedelta
     yesterday = date.today() - timedelta(days=1)
     date_str = yesterday.strftime('%d/%m/%Y')
@@ -38,7 +38,7 @@ def get_total_load(access_token):
     print("✅ Dati scaricati con successo!")
     return response.json()
 
-# --- Esecuzione principale dello script ---
+# Esecuzione principale dello script
 if __name__ == "__main__":
     try:
         # Step 1: Ottieni il token
@@ -74,11 +74,11 @@ if __name__ == "__main__":
             
             # Salva il DataFrame in un file JSON
             output_path = "dati/carico_elettrico.json"
-            # 'orient="records"' crea un file JSON pulito, perfetto per JavaScript
+            # 'orient="records"' crea un file JSON pulito
             df.to_json(output_path, orient="records", indent=2, date_format="iso")
             
             print(f"✅ Dati elaborati e salvati con successo in '{output_path}'")
-            print("\n--- Missione completata! ---")
+            print("\n--- Success! ---")
 
     except Exception as e:
         print(f"\n❌ ERRORE: {e}")

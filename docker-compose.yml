@@ -1,0 +1,31 @@
+# Docker Compose file version
+version: '3.8'
+
+# Define services
+services:
+
+  # Python script for data fetching
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # Create folder 'dati' on the host if it doesn't exist
+    # and map it to /app/dati in the container
+    volumes:
+      - ./dati:/app/dati
+    # Load environment variables from .env file
+    env_file:
+      - .env
+
+  # Nginx server for frontend
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend.Dockerfile
+    # Map port 80 of the container to port 8080 on the host
+    ports:
+      - "8080:80"
+    # Map the 'dati' folder from the host to the container,
+    # read-only to prevent modifications from the container
+    volumes:
+      - ./dati:/usr/share/nginx/html/dati:ro
